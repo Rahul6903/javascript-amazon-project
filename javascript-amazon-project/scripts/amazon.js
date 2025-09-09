@@ -1,6 +1,17 @@
-import { cart } from "../data/cart.js";
+import { cart,addToCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 let productsHTML="";
+
+function updateCartQuantity(){
+    let cartQuantity=0;
+    cart.forEach(cartItem=>{
+        cartQuantity+=cartItem.quantity;
+    });
+    document.querySelector(".js-cart-quantity").innerHTML=cartQuantity;
+}
+
+
+
 products.forEach(product=>{
     productsHTML+=`
     <div class="product-container">
@@ -62,21 +73,8 @@ const addToCartButtons=document.querySelectorAll(".js-add-to-cart");
 addToCartButtons.forEach(button=>{
     button.addEventListener("click",()=>{
         const productId=button.dataset.productId;
-        let cartQuantity=0;
-        
-        if (cart.some(item=>item.productId===productId)) {
-            cart.find(item=>item.productId===productId).quantity++;
-        }
-        else{
-            cart.push({
-                productId:productId,
-                quantity:1
-            });
-        }
-        cart.forEach(item=>{
-          cartQuantity+=item.quantity;
-          document.querySelector(".js-cart-quantity").innerHTML=cartQuantity;
-        });
+        addToCart(productId);
+        updateCartQuantity();
     });
 });
 
